@@ -35,6 +35,6 @@ score = accuracy_score(y_predict,y_test)
 print('{}% of samples were classifier correctly !'.format(score*100))
 
 
-f = open('model.p','wb')
+f = open('model2.p','wb')
 pickle.dump({'model':model},f)
 f.close()

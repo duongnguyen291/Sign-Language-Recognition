@@ -10,8 +10,8 @@ mp_drawing_styles = mp.solutions.drawing_styles
 
 hands = mp_hand.Hands(static_image_mode=True,min_detection_confidence=0.3)
 
-DATA_DIR = r'D:\github\introToAi\data\asl_alphabet_train\train_200_img'
-NUM_IMG = 150
+DATA_DIR = r'D:\github\introToAi\data\asl_alphabet_train\train_1000_img'
+NUM_IMG = 900
 data = []
 labels = []
 for dir_ in os.listdir(DATA_DIR):
