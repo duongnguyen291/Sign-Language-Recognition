@@ -22,53 +22,46 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 # Dinh nghia cac bien
-
-gestures = {'L_': 'L',
-           'fi': 'E',
-           'ok': 'F',
-           'pe': 'V',
-           'pa': 'B'
-            }
-
-gestures_map = {'E': 0,
-                'L': 1,
-                'F': 2,
-                'V': 3,
-                'B': 4
-                }
-
-
-gesture_names = {0: 'E',
-                 1: 'L',
-                 2: 'F',
-                 3: 'V',
-                 4: 'B'}
-
-
-image_path = 'data'
-models_path = 'models/saved_model.hdf5'
-rgb = False
+gestures = {}
+gestures_map = {}
+gesture_names = {}
+for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+    gestures[letter] = letter 
+    gestures_map[letter] = len(gestures_map)
+    gesture_names[len(gesture_names)] = letter
+    
+image_path = r'D:\github\introToAi\data\asl_alphabet_train\train_200_img'
+models_path = 'models/new_models.hdf5'
+rgb = True
 imageSize = 224
 
 
 # Ham xu ly anh resize ve 224x224 va chuyen ve numpy array
 def process_image(path):
-    img = Image.open(path)
-    img = img.resize((imageSize, imageSize))
-    img = np.array(img)
-    return img
-
+    try:
+        img = Image.open(path)
+        img = img.resize((imageSize, imageSize))
+        img = np.array(img)
+        return img
+    except Exception as e:
+        print(f"Error processing image '{path}': {str(e)}")
+        return None
 # Xu ly du lieu dau vao
-def process_data(X_data, y_data):
-    X_data = np.array(X_data, dtype = 'float32')
-    if rgb:
-        pass
-    else:
-        X_data = np.stack((X_data,)*3, axis=-1)
-    X_data /= 255
-    y_data = np.array(y_data)
-    y_data = to_categorical(y_data)
-    return X_data, y_data
+def process_data(X_data, y_data, batch_size=32):
+    processed_X_data = []
+    processed_y_data = []
+    for i in range(0, len(X_data), batch_size):
+        batch_X_data = X_data[i:i+batch_size]
+        batch_y_data = y_data[i:i+batch_size]
+        batch_X_data = np.array(batch_X_data, dtype='float32')
+        if rgb:
+            pass
+        else:
+            batch_X_data = np.stack((batch_X_data,) * 3, axis=-1)
+        batch_X_data /= 255
+        processed_X_data.append(batch_X_data)
+        processed_y_data.append(batch_y_data)
+    return processed_X_data, processed_y_data
 
 # Ham duuyet thu muc anh dung de train
 def walk_file_tree(image_path):
@@ -78,15 +71,31 @@ def walk_file_tree(image_path):
         for file in files:
             if not file.startswith('.'):
                 path = os.path.join(directory, file)
-                gesture_name = gestures[file[0:2]]
-                print(gesture_name)
-                print(gestures_map[gesture_name])
-                y_data.append(gestures_map[gesture_name])
-                X_data.append(process_image(path))
-
+                gesture_name = gestures.get(file[0], None)
+                if gesture_name is not None:
+                    processed_image = process_image(path)
+                    if processed_image is not None:
+                        y_data.append(gestures_map[gesture_name])
+                        X_data.append(processed_image)
             else:
                 continue
-
+    X_data, y_data = process_data(X_data, y_data)
+    return X_data, y_data
+def walk_file_tree_folder(image_path):
+    X_data = []
+    y_data = []
+    if os.path.exists(image_path):  # Kiểm tra xem thư mục chứa ảnh tồn tại không
+        for directory, subdirectories, files in os.walk(image_path):
+            for subdirectory in subdirectories:
+                gesture_name = subdirectory
+                gesture_label = gestures_map.get(gesture_name)  # Sử dụng get để tránh lỗi KeyError
+                if gesture_label is not None:  # Kiểm tra xem có ký hiệu của tên nhận dạng không
+                    subdir_path = os.path.join(directory, subdirectory)
+                    for file in os.listdir(subdir_path):
+                        if not file.startswith('.'):
+                            path = os.path.join(subdir_path, file)
+                            X_data.append(process_image(path))
+                            y_data.append(gesture_label)
     X_data, y_data = process_data(X_data, y_data)
     return X_data, y_data
 
@@ -136,5 +145,4 @@ model.fit(X_train, y_train, epochs=50, batch_size=64, validation_data=(X_test, y
 
 # Luu model da train ra file
 model.save('models/mymodel.h5')
-
 
