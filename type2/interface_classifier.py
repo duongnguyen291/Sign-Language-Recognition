@@ -30,7 +30,7 @@ while True:
     ret, frame = cap.read()
 
     H, W, _ = frame.shape
-    frame_flipped = cv2.flip(frame, 1)
+    frame_flipped = cv2.flip(frame, 0)
 
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
@@ -52,18 +52,26 @@ while True:
                 data_aux.append(x)
                 data_aux.append(y)
                 x_.append(x)
-                y_.append(y)   
+                y_.append(y)
+        if len(x_) > 42 or len(y_) > 42:
+            x_ = x_[0:42]
+            y_ = y_[0:42]
+        if len(data_aux) > 42: 
+            data_aux = data_aux[:42]
+
         x1 = int(min(x_) * W) + 10
         y1 = int(min(y_) * H) + 10
 
         x2 = int(max(x_) * W) - 10
         y2 = int(max(y_) * H) - 10
+        
         prediction = model.predict([np.asarray(data_aux)])
         predicted_character = label_dict[prediction[0]]
         print(predicted_character)
 
+
         cv2.rectangle(frame,(x1,y1),(x2,y2),(0,0,0), 4) #tao hien thi
-        cv2.putText(frame,predicted_character,(x1,y1),cv2.FONT_HERSHEY_SIMPLEX,1.3,(0,0,0),3,
+        cv2.putText(frame,predicted_character,(x1,y1 - 20),cv2.FONT_HERSHEY_SIMPLEX,1.3,(0,0,0),3,
                     cv2.LINE_AA)
     cv2.imshow('frame',frame)
     cv2.waitKey(5)
