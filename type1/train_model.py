@@ -47,7 +47,7 @@ def process_image(path):
         print(f"Error processing image '{path}': {str(e)}")
         return None
 # Xu ly du lieu dau vao
-def process_data(X_data, y_data, batch_size=32):
+def process_data(X_data, y_data, batch_size=128):
     processed_X_data = []
     processed_y_data = []
     for i in range(0, len(X_data), batch_size):
@@ -99,15 +99,31 @@ def walk_file_tree_folder(image_path):
     X_data, y_data = process_data(X_data, y_data)
     return X_data, y_data
 
-
-
+def filter_classes(X_data, y_data, min_samples=2):
+    filtered_X = []
+    filtered_y = []
+    class_counts = {}
+    for i, y in enumerate(y_data):
+        if y in class_counts:
+            class_counts[y] += 1
+        else:
+            class_counts[y] = 1
+    
+    for i, (X, y) in enumerate(zip(X_data, y_data)):
+        if class_counts[y] >= min_samples:
+            filtered_X.append(X)
+            filtered_y.append(y)
+    
+    return filtered_X, filtered_y
 
 # Load du lieu vao X va Y
-X_data, y_data = walk_file_tree(image_path)
+X_data, y_data = walk_file_tree_folder(image_path)
+
+# Filter out classes with too few samples
+X_data, y_data = filter_classes(X_data, y_data)
 
 # Phan chia du lieu train va test theo ty le 80/20
 X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size = 0.2, random_state=12, stratify=y_data)
-
 # Dat cac checkpoint de luu lai model tot nhat
 model_checkpoint = ModelCheckpoint(filepath=models_path, save_best_only=True)
 early_stopping = EarlyStopping(monitor='val_acc',

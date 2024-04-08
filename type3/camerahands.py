@@ -24,13 +24,14 @@ analysisframe = ''
 letterpred = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y']
 while True:
     _, frame = cap.read()
-
+    
     k = cv2.waitKey(1)
     if k%256 == 27:
         # ESC pressed
         print("Escape hit, closing...")
         break
     elif k%256 == 32:
+        # SPACE pressed
         # SPACE pressed
         analysisframe = frame
         showframe = analysisframe
