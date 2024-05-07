@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 
 # Định nghĩa các biến
 gestures_map = {chr(65+i): i for i in range(26)}  # Tạo một bản đồ từ chữ cái sang số từ 0 đến 25
-image_path = r'D:\github\introToAi\data\asl_alphabet_train\train_200_img_one_folder'
+image_path = r'D:\code\introToAi\data\asl_alphabet_train\train_200_img_one_folder'
 models_path = 'models/saved_model.hdf5'
 imageSize = 224
 batch_size = 32

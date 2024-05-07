@@ -20,10 +20,13 @@ label_dict = {}  # Khởi tạo từ điển
 # Tạo ánh xạ từ 1 đến 26 (cho các chữ cái từ 'A' đến 'Z')
 for i in range(1, 27):
     label_dict[chr(65 + i)] = chr(65 + i)   # Sử dụng hàm chr() để chuyển đổi số thành chữ cái
-
+label_dict['V'] = 'Hello everyone <33'
 print(label_dict)
-while True:     
 
+while True:     
+    k = cv2.waitKey(10)
+    if k == ord('q'):
+        break
     data_aux = []
     x_ = []
     y_ = []

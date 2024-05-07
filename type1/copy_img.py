@@ -2,10 +2,10 @@ import os
 import shutil
 NUMBER_IMG = 200
 # Đường dẫn tới thư mục chứa tất cả các ảnh
-source_folder = r'D:\github\introToAi\data\asl_alphabet_train\asl_alphabet_train'
+source_folder = r'D:\code\introToAi\data\asl_alphabet_train\asl_alphabet_train'
 
 # Đường dẫn tới thư mục mới mà bạn muốn tạo và copy các ảnh vào
-target_folder = r'D:\github\introToAi\data\asl_alphabet_train\train_200_img_one_folder'
+target_folder = r'D:\code\introToAi\data\asl_alphabet_train\train_200_img_one_folder'
 
 def copy_in_one_folder_to_many_folder(source_folder, target_folder):
     # Tạo thư mục mới nếu chưa tồn tại

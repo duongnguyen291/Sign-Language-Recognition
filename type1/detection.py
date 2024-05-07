@@ -11,14 +11,40 @@ prediction = ''
 score = 0
 bgModel = None
 
-gesture_names = {0: 'E',
-                 1: 'L',
-                 2: 'F',
-                 3: 'V',
-                 4: 'B'}
+# gesture_names = {0: 'E',
+#                  1: 'L',
+#                  2: 'F',
+#                  3: 'H',
+#                  4: 'B'}
+gesture_names = {0: 'A',
+                 1: 'B',
+                 2: 'C',
+                 3: 'D',
+                 4: 'E',
+                 5: 'F',
+                 6: 'G',
+                 7: 'H',
+                 8: 'I',
+                 9: 'J',
+                 10: 'K',
+                 11: 'L',
+                 12: 'M',
+                 13: 'N',
+                 14: 'O',
+                 15: 'P',
+                 16: 'Q',
+                 17: 'R',
+                 18: 'S',
+                 19: 'T',
+                 20: 'U',
+                 21: 'V',
+                 22: 'W',
+                 23: 'X',
+                 24: 'Y',
+                 25: 'Z'}
 
 # Load model tu file da train
-model = load_model('models/models_mau.h5')
+model = load_model('models\mymodel.h5')
 
 # Ham de predict xem la ky tu gi
 def predict_rgb_image_vgg(image):
@@ -135,7 +161,7 @@ while camera.isOpened():
         time.sleep(1)
 
 
-    cv2.imshow('original', cv2.resize(frame, dsize=None, fx=0.5, fy=0.5))
+    cv2.imshow('original', cv2.resize(frame, dsize=None, fx=1, fy=1))
 
 
 cv2.destroyAllWindows()
