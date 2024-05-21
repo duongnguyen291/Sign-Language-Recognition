@@ -7,7 +7,8 @@ from tkinter import Label, Text, Scrollbar, VERTICAL, END, Button
 from PIL import Image, ImageTk
 import time
 
-model_dict = pickle.load(open('./models/modelV03.p','rb'))
+TIME_DELAY = 0.01 
+model_dict = pickle.load(open('./models/model2.p','rb'))
 model = model_dict['model']
 
 cap = cv2.VideoCapture(0)
@@ -35,14 +36,17 @@ result_label = Label(root, text="", font=("Helvetica", 24))
 result_label.pack()
 
 # Khung để hiển thị lịch sử dự đoán
-history_label = Label(root, text="History:", font=("Helvetica", 18))
-history_label.pack(side=tk.RIGHT)
+history_frame = tk.Frame(root)
+history_frame.pack(side=tk.RIGHT, fill=tk.Y)
+
+history_label = Label(history_frame, text="History:", font=("Helvetica", 18))
+history_label.grid(row=0, column=0, sticky="n")
 
 # Thêm Text widget để hiển thị lịch sử
-history_text = Text(root, height=20, width=30, wrap=tk.WORD)
-history_text.pack(side=tk.RIGHT, fill=tk.Y)
-scrollbar = Scrollbar(root, orient=VERTICAL, command=history_text.yview)
-scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+history_text = Text(history_frame, height=20, width=30, wrap=tk.WORD)
+history_text.grid(row=1, column=0, sticky="n")
+scrollbar = Scrollbar(history_frame, orient=VERTICAL, command=history_text.yview)
+scrollbar.grid(row=1, column=1, sticky="ns")
 history_text.config(yscrollcommand=scrollbar.set)
 
 # Nút xóa lịch sử
@@ -50,8 +54,8 @@ def clear_history():
     history_text.delete('1.0', END)
     history.clear()
 
-clear_button = Button(root, text="Clear History", command=clear_history)
-clear_button.pack(side=tk.RIGHT)
+clear_button = Button(history_frame, text="Clear History", command=clear_history)
+clear_button.grid(row=2, column=0, sticky="n")
 
 # Danh sách lưu trữ lịch sử các từ đã đoán
 history = []
@@ -101,7 +105,7 @@ def update_frame():
         y2 = int(max(y_) * H) - 10
         
         current_time = time.time()
-        if current_time - last_prediction_time >= 3:  # Delay 3 seconds
+        if current_time - last_prediction_time >= TIME_DELAY:  # Delay n seconds
             prediction = model.predict([np.asarray(data_aux)])
             predicted_character = label_dict.get(prediction[0], "")
             result_label.config(text=predicted_character)
@@ -111,7 +115,7 @@ def update_frame():
             
             if predicted_character != previous_prediction and predicted_character:
                 history.append(predicted_character)
-                history_text.insert(END, predicted_character + "\n")
+                history_text.insert(END, predicted_character + ' ')
                 previous_prediction = predicted_character
                 last_prediction_time = current_time
 
