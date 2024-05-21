@@ -4,7 +4,7 @@ import pickle
 import numpy as np
 
 
-model_dict = pickle.load(open('./model2.p','rb'))
+model_dict = pickle.load(open('./models/modelV03.p','rb'))
 model = model_dict['model']
 
 cap = cv2.VideoCapture(0)

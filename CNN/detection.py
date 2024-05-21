@@ -44,7 +44,7 @@ gesture_names = {0: 'A',
                  25: 'Z'}
 
 # Load model tu file da train
-model = load_model('models\mymodel.h5')
+model = load_model('models\mymodel_500image.h5')
 
 # Ham de predict xem la ky tu gi
 def predict_rgb_image_vgg(image):
@@ -95,20 +95,20 @@ while camera.isOpened():
     # Lam min anh
     frame = cv2.bilateralFilter(frame, 5, 50, 100)
     # Lat ngang anh
-    frame = cv2.flip(frame, 1)
+    # frame = cv2.flip(frame, 1)
 
     # Ve khung hinh chu nhat vung detection region
-    cv2.rectangle(frame, (int(cap_region_x_begin * frame.shape[1]), 0),
-                  (frame.shape[1], int(cap_region_y_end * frame.shape[0])), (255, 0, 0), 2)
+   
+    cv2.rectangle(frame, (0, 0),
+              (int(cap_region_x_begin * frame.shape[1]), int(cap_region_y_end * frame.shape[0])), (255, 0, 0), 2)
 
     # Neu ca capture dc nen
     if isBgCaptured == 1:
         # Tach nen
         img = remove_background(frame)
 
-        # Lay vung detection
-        img = img[0:int(cap_region_y_end * frame.shape[0]),
-              int(cap_region_x_begin * frame.shape[1]):frame.shape[1]]  # clip the ROI
+       
+        img = img[0:int(cap_region_y_end * frame.shape[0]), 0:int(cap_region_x_begin * frame.shape[1])]  # clip the ROI
 
 
 

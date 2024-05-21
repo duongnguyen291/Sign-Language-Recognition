@@ -1,3 +1,4 @@
+from sklearn.metrics import accuracy_score, classification_report
 #train classifier
 import pickle
 #classifier is random forest classifier
@@ -38,3 +39,13 @@ print('{}% of samples were classifier correctly !'.format(score*100))
 f = open('model2.p','wb')
 pickle.dump({'model':model},f)
 f.close()
+
+y_pred = model.predict(x_test)
+
+# Tính toán độ chính xác
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+# In ra báo cáo phân loại chi tiết
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
