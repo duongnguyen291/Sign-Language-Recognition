@@ -20,7 +20,6 @@ mp_drawing_styles = mp.solutions.drawing_styles
 hands = mp_hand.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
 label_dict = {chr(65 + i - 1): chr(65 + i - 1) for i in range(1, 27)}
-label_dict['V'] = 'Hello everyone <33'
 print(label_dict)
 
 # Tạo cửa sổ Tkinter
