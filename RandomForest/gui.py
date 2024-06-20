@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 import time
 
 TIME_DELAY = 0.01 
-model_dict = pickle.load(open('./models/model2.p','rb'))
+model_dict = pickle.load(open('./models/modelV03.p','rb'))
 model = model_dict['model']
 
 cap = cv2.VideoCapture(0)
@@ -19,8 +19,14 @@ mp_drawing_styles = mp.solutions.drawing_styles
 
 hands = mp_hand.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
-label_dict = {chr(65 + i - 1): chr(65 + i - 1) for i in range(1, 27)}
+# label_dict = {chr(65 + i - 1): chr(65 + i - 1) for i in range(1, 27)}
+# print(label_dict)
+
+# Tạo từ điển với các nhãn từ 0 đến 9 và từ A đến Z
+label_dict = {str(i): str(i) for i in range(10)}
+label_dict.update({chr(65 + i): chr(65 + i) for i in range(26)})
 print(label_dict)
+
 
 # Tạo cửa sổ Tkinter
 root = tk.Tk()
