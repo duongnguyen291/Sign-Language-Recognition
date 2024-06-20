@@ -3,6 +3,10 @@
 
 This repository is dedicated to the project on Sign Language Recognition using two different approaches: Convolutional Neural Networks (CNN) and Random Forest Classifier. The primary goal of this project is to recognize sign language through live video and compare the accuracy and efficiency of these two approaches with existing state-of-the-art methods.
 
+## Demo 
+
+[https://github.com/duongnguyen291/Sign-Language-Recognition/assets/116486270/98d5b29c-dc0d-42c4-98c3-a1b8e8c9e22c](https://github.com/duongnguyen291/Sign-Language-Recognition/assets/116486270/98d5b29c-dc0d-42c4-98c3-a1b8e8c9e22c)
+
 ## Project Structure
 
 ```
