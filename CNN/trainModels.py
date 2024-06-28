@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 
 # Định nghĩa các biến
 gestures_map = {chr(65+i): i for i in range(26)}  # Tạo một bản đồ từ chữ cái sang số từ 0 đến 25
-image_path = r'D:\code\introToAi\data\asl_alphabet_train\train_200_img_one_folder'
+image_path = r'/kaggle/input/asl-alphabet/asl_alphabet_train'
 models_path = 'models/saved_model.hdf5'
 imageSize = 224
 batch_size = 32
@@ -35,9 +35,24 @@ def walk_file_tree(image_path):
                 y_data.append(gestures_map[gesture_name])
                 X_data.append(process_image(path))
     return X_data, y_data
-
+def walk_file_tree_folder(image_path):
+    X_data = []
+    y_data = []
+    if os.path.exists(image_path):  # Kiểm tra xem thư mục chứa ảnh tồn tại không
+        for directory, subdirectories, files in os.walk(image_path):
+            for subdirectory in subdirectories:
+                gesture_name = subdirectory
+                gesture_label = gestures_map.get(gesture_name)  # Sử dụng get để tránh lỗi KeyError
+                if gesture_label is not None:  # Kiểm tra xem có ký hiệu của tên nhận dạng không
+                    subdir_path = os.path.join(directory, subdirectory)
+                    for file in os.listdir(subdir_path):
+                        if not file.startswith('.'):
+                            path = os.path.join(subdir_path, file)
+                            X_data.append(process_image(path))
+                            y_data.append(gesture_label)
+    return X_data, y_data
 # Load dữ liệu
-X_data, y_data = walk_file_tree(image_path)
+X_data, y_data = walk_file_tree_folder(image_path)
 
 # Phân chia dữ liệu train và test
 X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=0.2, random_state=12, stratify=y_data)
