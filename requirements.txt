@@ -3,3 +3,4 @@ mediapipe==0.10.1
 scikit-learn==1.2.0
 tk==0.1.0
 pillow
+numpy==1.26.4
